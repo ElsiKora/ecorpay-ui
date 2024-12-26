@@ -1,3 +1,10 @@
+# [1.1.0](https://github.com/ElsiKora/Ecorpay-Ui-Kit/compare/v1.0.1...v1.1.0) (2024-12-26)
+
+
+### Features
+
+* **ui,button:** Implement a Button ui comp ([d95d6b9](https://github.com/ElsiKora/Ecorpay-Ui-Kit/commit/d95d6b97b382462aa34b1bd6eea0bc10e3a76a7b))
+
 ## [1.0.1](https://github.com/ElsiKora/Ecorpay-Ui-Kit/compare/v1.0.0...v1.0.1) (2024-12-26)
 
 
