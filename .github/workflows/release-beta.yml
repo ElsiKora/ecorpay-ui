@@ -15,6 +15,7 @@ jobs:
       matrix:
         node-version: [20.x]
     steps:
+      - uses: actions/checkout@v3
       - uses: ./.github/workflows/quality-check.yml
 
   Release:
