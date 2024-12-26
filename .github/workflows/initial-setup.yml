@@ -1,0 +1,33 @@
+name: Initial Setup
+
+on:
+  workflow_call:
+
+jobs:
+  Initial_setup:
+    runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        node-version: [20.x]
+    steps:
+      - uses: actions/checkout@v3
+
+      # Кэширование node_modules
+      - name: Cache node_modules
+        uses: actions/cache@v3
+        with:
+          path: node_modules
+          key: ${{ runner.os }}-node-modules-${{ hashFiles('**/package-lock.json') }}
+          restore-keys: |
+            ${{ runner.os }}-node-modules-
+
+      # Установка Node.js
+      - name: Setting up Node.js ${{ matrix.node-version }}
+        uses: actions/setup-node@v3
+        with:
+          node-version: ${{ matrix.node-version }}
+          cache: npm # Встроенное кэширование npm для ускорения
+
+      # Установка зависимостей
+      - name: Installing modules
+        run: npm ci

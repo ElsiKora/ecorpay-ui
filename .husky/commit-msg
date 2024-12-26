@@ -1,0 +1,2 @@
+echo '⌛️⌛️⌛️ Running commit linter...'
+npx --no -- commitlint --edit $1
