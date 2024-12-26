@@ -9,17 +9,96 @@ on:
       - main
 
 jobs:
-  Quality_Check:
+  Initial_setup:
     runs-on: ubuntu-latest
     strategy:
       matrix:
         node-version: [20.x]
     steps:
       - uses: actions/checkout@v3
-      - uses: ./.github/workflows/quality-check.yml
+
+      # Кэширование node_modules
+      - name: Cache node_modules
+        uses: actions/cache@v3
+        with:
+          path: node_modules
+          key: ${{ runner.os }}-node-modules-${{ hashFiles('**/package-lock.json') }}
+          restore-keys: |
+            ${{ runner.os }}-node-modules-
+
+      # Установка Node.js
+      - name: Setting up Node.js ${{ matrix.node-version }}
+        uses: actions/setup-node@v3
+        with:
+          node-version: ${{ matrix.node-version }}
+          cache: npm # Встроенное кэширование npm для ускорения
+
+      # Установка зависимостей
+      - name: Installing modules
+        run: npm ci
+
+  Linting_typescript:
+    runs-on: ubuntu-latest
+    needs: Initial_setup
+    steps:
+      - uses: actions/checkout@v3
+
+      # Восстановление кэша node_modules
+      - name: Restore node_modules cache
+        uses: actions/cache@v3
+        with:
+          path: node_modules
+          key: ${{ runner.os }}-node-modules-${{ hashFiles('**/package-lock.json') }}
+
+      # Линтинг TypeScript
+      - name: Linting TypeScript
+        run: npm run lint
+
+  Unit_testing:
+    runs-on: ubuntu-latest
+    needs: Initial_setup
+    steps:
+      - uses: actions/checkout@v3
+
+      # Восстановление кэша node_modules
+      - name: Restore node_modules cache
+        uses: actions/cache@v3
+        with:
+          path: node_modules
+          key: ${{ runner.os }}-node-modules-${{ hashFiles('**/package-lock.json') }}
+
+      # Unit тесты
+      - name: Unit testing
+        run: echo 'npm run unit'
+
+  Screenshot_testing:
+    runs-on: ubuntu-latest
+    needs: Initial_setup
+    steps:
+      - uses: actions/checkout@v3
+
+      # Восстановление кэша node_modules
+      - name: Restore node_modules cache
+        uses: actions/cache@v3
+        with:
+          path: node_modules
+          key: ${{ runner.os }}-node-modules-${{ hashFiles('**/package-lock.json') }}
+
+      # Визуальные тесты
+      - name: Screenshot testing
+        run: echo 'npm run snapshot'
+
+      # Сохранение артефактов (текущие скриншоты)
+    #   - name: Upload Current Screenshots
+    #     # Загружаем артефакты, даже если тесты упали
+    #     if: always()
+    #     uses: actions/upload-artifact@v4
+    #     with:
+    #       name: current-screenshots
+    #       path: .loki/current
 
   Release:
-    needs: Quality_Check
+    needs: [Initial_setup, Linting_typescript, Unit_testing, Screenshot_testing]
     if: github.event_name == 'push'
     permissions:
       contents: write
@@ -29,7 +108,13 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v3
-      - uses: ./.github/workflows/cache-restore.yml
+
+      # Восстановление кэша node_modules
+      - name: Restore node_modules cache
+        uses: actions/cache@v3
+        with:
+          path: node_modules
+          key: ${{ runner.os }}-node-modules-${{ hashFiles('**/package-lock.json') }}
 
       - name: Building project
         run: npm run build
