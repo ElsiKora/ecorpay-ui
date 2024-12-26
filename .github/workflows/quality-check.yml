@@ -10,8 +10,8 @@ jobs:
       matrix:
         node-version: [20.x]
     steps:
-      - uses: ./.github/workflows/initial_setup.yml
       - uses: actions/checkout@v3
+      - uses: ./.github/workflows/initial_setup.yml
 
       # Линтинг TypeScript
       - name: Linting TypeScript
