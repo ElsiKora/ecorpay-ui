@@ -3,35 +3,56 @@ import { cva, type VariantProps } from 'class-variance-authority';
 import { cn } from '@/utils/cn';
 import { Slot } from '@radix-ui/react-slot';
 
-const buttonVariants = cva('disabled:bg-black-100 disabled:text-black-300 transition-all', {
-  variants: {
-    variant: {
-      primary: 'bg-accent text-white hover:bg-accent-500',
-      red: 'bg-red-200 text-red-400 hover:bg-red-300 hover:text-red',
-      gray: 'bg-black-100 text-black hover:bg-black-200',
-      light: 'bg-accent-100 text-accent hover:bg-accent-200',
-      white: 'bg-white text-black hover:bg-black hover:text-white',
-      outlineGray: 'hover:bg-accent hover:bg-hover',
-      outline: 'hover:bg-accent hover:bg-hover',
-      clear: '',
+const buttonVariants = cva(
+  'disabled:bg-black-100 disabled:text-black-300 transition-all font-medium',
+  {
+    variants: {
+      variant: {
+        // Primary variants
+        'primary-l':
+          'bg-accent text-white hover:bg-accent-500 mob:text-sm tablet:text-base py-15px px-30px mob:rounded-[0.9375rem] tablet:rounded-[1.25rem]',
+        'primary-m':
+          'bg-accent text-white hover:bg-accent-500 mob:text-xs tablet:text-sm py-10px mob:px-15px tablet:px-20px rounded-[1.25rem]',
+
+        // Red variants
+        'red-l':
+          'bg-red-200 text-red-400 hover:bg-red-300 hover:text-red mob:text-sm tablet:text-base py-15px px-30px mob:rounded-[0.9375rem] tablet:rounded-[1.25rem]',
+
+        //   Gray variants
+        'gray-l':
+          'bg-black-100 text-black hover:bg-black-200 mob:text-sm tablet:text-base py-15px px-30px mob:rounded-[0.9375rem] tablet:rounded-[1.25rem]',
+        'gray-m':
+          'bg-black-100 text-black hover:bg-black-200 mob:text-xs tablet:text-sm py-10px mob:px-15px tablet:px-20px rounded-[1.25rem]',
+
+        // Secondary variants
+        'secondary-l':
+          'bg-accent-100 text-accent hover:bg-accent-200 mob:text-sm tablet:text-base py-15px px-30px mob:rounded-[0.9375rem] tablet:rounded-[1.25rem]',
+        'secondary-m':
+          'bg-accent-100 text-accent hover:bg-accent-200 mob:text-xs tablet:text-sm py-10px mob:px-15px tablet:px-20px rounded-[1.25rem]',
+
+        // White variants
+        'white-m':
+          'bg-white text-black hover:bg-black hover:text-white mob:text-xs tablet:text-sm py-10px mob:px-15px tablet:px-20px rounded-[1.25rem]',
+
+        // Outline variants
+        'outline-primary-s':
+          'border-2 border-accent text-accent mob:text-xxs tablet:text-xs mob:py-7px mob:px-10px tablet:py-10px tablet:px-15px rounded-[1.25rem]',
+        'outline-gray-s':
+          'border-2 border-black-100 text-black-300 hover:border-accent hover:text-accent mob:text-xxs tablet:text-xs mob:py-7px mob:px-10px tablet:py-10px tablet:px-15px rounded-[1.25rem]',
+
+        // Text variants
+        'text-l':
+          'bg-transparent mob:text-black tablet:text-black-300 mob:hover:border-accent-100 mob:hover:bg-accent-100 tablet:hover:text-accent mob:border-2 tablet:border-none mob:border-black-100 mob:text-sm tablet:text-base py-15px px-30px mob:rounded-[0.9375rem] tablet:rounded-[1.25rem]',
+
+        //   Clear variant
+        clear: '',
+      },
     },
-    size: {
-      s: 'mob:py-10px mob:px-15px tablet:py-10px tablet:px-15px mob:text-xs tablet:text-sm',
-      m: 'mob:py-7px mob:px-10px tablet:py-10px tablet:px-20px',
-      l: 'mob:text-sm tablet:text-base py-15px px-30px',
-      clear: '',
+    defaultVariants: {
+      variant: 'primary-m',
     },
-    rounded: {
-      default: 'rounded-[1.25rem]',
-      clear: '',
-    },
-  },
-  defaultVariants: {
-    variant: 'primary',
-    size: 'l',
-    rounded: 'default',
-  },
-});
+  }
+);
 
 export interface ButtonProps
   extends React.ButtonHTMLAttributes<HTMLButtonElement>,
@@ -41,9 +62,9 @@ export interface ButtonProps
 }
 
 export const Button: FC<ButtonProps> = (props) => {
-  const { size, variant, className, asChild, ...otherProps } = props;
+  const { variant, className, asChild, ...otherProps } = props;
 
   const Comp = asChild ? Slot : 'button';
 
-  return <Comp className={cn(buttonVariants({ size, variant }), className)} {...otherProps}></Comp>;
+  return <Comp className={cn(buttonVariants({ variant }), className)} {...otherProps}></Comp>;
 };
