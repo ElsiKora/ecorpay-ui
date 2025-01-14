@@ -17,7 +17,7 @@ export const DefaultOn: Story = {
   args: {
     children: 'Some text',
     className: 'testClass',
-    // checked: true,
+    checked: true,
   },
 };
 
