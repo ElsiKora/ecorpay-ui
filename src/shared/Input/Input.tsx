@@ -1,15 +1,16 @@
 import { cn } from '@/utils/cn';
 import { FC, ReactNode } from 'react';
 
-interface InputProps extends React.InputHTMLAttributes<HTMLInputElement> {
+export interface InputProps extends React.InputHTMLAttributes<HTMLInputElement> {
   className?: string;
+  inputFieldClassName?: string;
   label?: string;
   isError?: boolean;
   errorMsg?: string;
   leftContent?: ReactNode;
   rightContent?: ReactNode;
   align?: 'left' | 'center';
-  type: 'number' | 'text' | 'password' | 'email' | 'search';
+  type?: 'number' | 'text' | 'password' | 'email' | 'search';
 }
 
 export const Input: FC<InputProps> = (props) => {
@@ -22,13 +23,15 @@ export const Input: FC<InputProps> = (props) => {
     leftContent,
     rightContent,
     align,
+    type = 'text',
+    inputFieldClassName,
     ...otherProps
   } = props;
 
   return (
     <label
       className={cn(
-        'relative flex flex-col mob:p-15px tablet:p-5 mob:rounded-[15px] tablet:rounded-[20px] cursor-text transition-colors border-2',
+        'relative flex flex-col gap-5px mob:p-15px tablet:p-5 mob:rounded-[15px] tablet:rounded-[20px] cursor-text transition-colors border-2',
         {
           'justify-center text-center': align === 'center',
           'border-red-400': isError,
@@ -39,7 +42,7 @@ export const Input: FC<InputProps> = (props) => {
       )}
     >
       {/* Label text */}
-      <span className="mob:text-xxs tablet:text-sm text-black-300">{label}</span>
+      <span className="mob:text-xxs tablet:text-sm text-black-300 font-medium">{label}</span>
 
       {/* Inpfur field container */}
       <div className="flex gap-[5px] mob:text-xs tablet:text-base">
@@ -51,9 +54,11 @@ export const Input: FC<InputProps> = (props) => {
               'text-red-400': isError,
               'justify-center text-center placeholder:text-center focus-visible:placeholder:opacity-0':
                 align === 'center',
-            }
+            },
+            inputFieldClassName
           )}
           disabled={disabled}
+          type={type}
           {...otherProps}
         />
         {rightContent}
